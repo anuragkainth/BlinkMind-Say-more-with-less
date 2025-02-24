@@ -1,0 +1,41 @@
+<h2>Search for Members</h2>
+
+<%= form_with url: search_friends_path, method: :get, local: true do %>
+  <%= label_tag :query, "Search by Name or Email:" %>
+  <div style="margin-bottom: 10px;"></div>
+  <%= text_field_tag :query, params[:query] %>
+  <%= submit_tag "Search", style: "margin-left: 2px" %>
+<% end %>
+
+<% if @users.present? %>
+  <ul>
+    <% @users.each do |user| %>
+      <li style="margin-bottom: 10px; list-style-type: none; display: flex; align-items: center;">
+        <% if user.profile_pic.present? %>
+          <%= image_tag user.profile_pic, alt: user.name, style: "width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;" %>
+        <% else %>
+          <%= image_tag "default_profile.png", alt: user.name, style: "width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;" %>
+        <% end %>
+        <%= link_to user.name, user_path(user) %>
+        <div style="margin-left: 10px;"></div>
+        <% if current_user.all_friends.include?(user) %>
+          <span>-- Already a Friend</span>
+        <% elsif current_user.sent_friend_requests.map(&:friend).include?(user) %>
+          <span>-- Request Sent Successfully!!</span>
+        <% else %>
+          <%= form_with url: friendships_path, method: :post, local: true do %>
+            <%= hidden_field_tag :friend_id, user.id %> 
+            <div style="margin-left: 10px;"></div>
+            <%= submit_tag "Send Friend Request" %>
+          <% end %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <% if params[:query].present? && @users.blank? %>
+    <p>Error - Person does not exist</p>
+  <% end %>
+<% end %>
+
+<p><%= link_to "Back to Friends", friends_path %></p>

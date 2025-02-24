@@ -1,0 +1,29 @@
+<h2 style="display: inline; margin-right: 10px;">
+  <img src="catchup-app-logo.png" alt="Logo" style="height: 60px; width: 60px; vertical-align: middle;" />
+  Catchup
+</h2>
+<p style="margin-left: 5px;">Connect with Thoughts</p>
+
+<div style="border: 1px solid #ccc; padding: 20px; border-radius: 8px; max-width: 400px; margin-top: 30px">
+  <h3>Login</h3>
+
+  <%= form_with url: login_path, method: :post, local: true do %>
+    <div style="margin-bottom: 15px;">
+      <label for="email">Email:</label>
+      <%= text_field_tag :email, nil, required: true, style: "width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;" %>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label for="password">Password:</label>
+      <%= password_field_tag :password, nil, required: true, style: "flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #ccc;" %>
+      <%= submit_tag "Login", style: "margin-left: 10px; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer;" %>
+    </div>
+  <% end %>
+
+  <p>
+    New user? <%= link_to "Signup", signup_path %>
+  </p>
+  <p>
+    <%= link_to "Forgot Password", new_password_reset_path %>
+  </p>
+</div>

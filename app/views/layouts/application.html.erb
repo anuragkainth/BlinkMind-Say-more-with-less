@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Catchup</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <style>
+      .nav-links {
+        display: flex;
+        gap: 1em;
+        justify-content: flex-end;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .icon {
+        margin-right: auto;
+      }
+      header nav ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 25px;
+      }
+      main {
+        margin: 2em auto;
+        max-width: 800px;
+      }
+      .button {
+        margin-top: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <% if current_user %>
+      <header>
+        <div class="icon">
+          <img src="catchup-app-logo.png" alt="Site Icon" style="width: 50px; height: 50px; margin-top: 40px; margin-left: 20px;" />
+        </div>
+        <nav>
+          <ul class="nav-links">
+            <li><%= link_to "Home", home_path %></li>
+            <li><%= link_to "Friends", friends_path %></li>
+            <li><%= link_to "Account", user_path(current_user) %></li>
+            <li><%= link_to "Logout", logout_path, method: :delete, data: { confirm: "Are you sure?" } %></li>
+          </ul>
+        </nav>
+      </header>
+    <% end %>
+
+    <main>
+      <% if notice %>
+        <p class="notice"><%= notice %></p>
+      <% end %>
+      <% if alert %>
+        <p class="alert"><%= alert %></p>
+      <% end %>
+      <%= yield %>
+    </main>
+  </body>
+</html>

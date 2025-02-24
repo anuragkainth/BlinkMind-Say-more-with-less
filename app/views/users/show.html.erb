@@ -1,0 +1,46 @@
+<h1><%= @user.name %>'s Profile</h1>
+
+<div>
+  <% if @user.profile_pic.attached? %>
+    <%= image_tag url_for(@user.profile_pic), alt: @user.name, style: "width: 100px; height: 100px; border-radius: 50%;" %>
+  <% else %>
+    <%= image_tag "default_profile.png", alt: @user.name, style: "width: 100px; height: 100px; border-radius: 50%;" %>
+  <% end %>
+</div>
+
+<p><strong>Email:</strong> <%= @user.email %></p>
+<p><strong>About:</strong> <%= @user.about %></p>
+<p><strong>Number of Friends:</strong> <%= @user.all_friends.count %></p>
+<p><strong>Number of Posts:</strong> <%= @user.posts.count %></p>
+
+<% if current_user == @user %>
+  <%= link_to "Edit Profile", edit_user_path(@user), class: "button" %>
+<% else %>
+  <% if current_user.all_friends.include?(@user) %>
+    <% friendship = current_user.friendships.find_by(friend: @user) || current_user.inverse_friendships.find_by(user: @user) %>
+    <%= form_with url: friendship_path(friendship), method: :delete, local: true do %>
+      <%= submit_tag "Remove as Friend", class: "button" %>
+    <% end %>
+  <% elsif current_user.sent_friend_requests.map(&:friend).include?(@user) %>
+    <p>Friend Request Sent</p>
+  <% else %>
+    <%= form_with url: friendships_path, method: :post, local: true do %>
+      <%= hidden_field_tag :friend_id, @user.id %>
+      <%= submit_tag "Add as Friend", class: "button" %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<hr>
+
+<h2>Posts</h2>
+<% if @user.posts.any? %>
+  <% @user.posts.order(created_at: :desc).each do |post| %>
+    <div style="border: 1px solid #ccc; padding: 5px; margin-bottom: 5px; padding-left: 8px;">
+      <p><%= post.content %></p>
+      <p style="font-size: small; color: gray;"><%= time_ago_in_words(post.created_at) %> ago | Likes: <%= post.likes.count %></p>
+    </div>
+  <% end %>
+<% else %>
+  <p>No posts yet.</p>
+<% end %>

@@ -1,0 +1,27 @@
+<h1>Your Friends</h1>
+
+<% if @friends.any? %>
+  <ul style="list-style-type: none; padding: 0;">
+    <% @friends.each do |friend| %>
+      <li style="margin-bottom: 10px;">
+        <div style="display: flex; align-items: center;">
+          <% if friend.profile_pic.attached? %>
+            <%= image_tag url_for(friend.profile_pic), alt: friend.name, style: "width: 50px; height: 50px; border-radius: 50%;" %>
+          <% else %>
+            <%= image_tag "default_profile.png", alt: friend.name, style: "width: 50px; height: 50px; border-radius: 50%;" %>
+          <% end %>
+          <%= link_to friend.name, user_path(friend), style: "margin-left: 10px;" %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You have no friends yet.</p>
+<% end %>
+
+<p>
+  <%= link_to "View Pending Requests (#{current_user.pending_friend_requests.count})", pending_friends_path, class: "button" %>
+</p>
+<p>
+  <%= link_to "Add a New Friend", search_friends_path, class: "button" %>
+</p>

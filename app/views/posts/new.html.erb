@@ -1,0 +1,13 @@
+<h1>Post a Thought</h1>
+
+<%= form_with model: @post, local: true do |f| %>
+  <div>
+    <%= f.label :content, "What's on your mind?" %><br>
+    <%= f.text_area :content, rows: 4, cols: 50 %>
+  </div>
+  <div style="margin-top: 10px;">
+    <%= f.submit "Share" %>
+  </div>
+<% end %>
+
+<p><%= link_to "Back to Home Feed", home_path %></p>
